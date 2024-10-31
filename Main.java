@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import loja.Loja;
@@ -20,6 +23,15 @@ public class Main {
         boolean dentro = true;
         String locate = "1";
         Exceptions err = new Exceptions();
+
+        FileInputStream stream = new FileInputStream("apresentacao.txt");
+        InputStreamReader reader = new InputStreamReader(stream);
+        BufferedReader br = new BufferedReader(reader);
+        String linha = br.readLine();
+        while(linha != null) {
+            System.out.println(linha);
+            linha = br.readLine();
+        }
 
         while(dentro) {
             switch (locate) {
