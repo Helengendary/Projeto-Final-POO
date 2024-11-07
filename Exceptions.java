@@ -13,8 +13,8 @@ public class Exceptions {
             String atual = "";
             Boolean igual = false;
             for (int i = 0; i < links.length(); i++) {
-                if (links.charAt(i) == '|') {
-                    if (atual.equals(valor)) {
+                if (links.charAt(i) == '|' || i == links.length()-1) {
+                    if (atual.equals(valor.trim())) {
                         igual = true;
                         break;
                     }
@@ -27,5 +27,9 @@ public class Exceptions {
                 throw new VerifyExcepiton("DIGITE UM NUMERO VALIDO!");
             }
         }
+    }
+
+    public static void possivelCPF() throws VerifyExcepiton {
+        
     }
 }

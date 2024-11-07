@@ -1,20 +1,18 @@
 package usuario;
 import java.util.ArrayList;
-import java.util.Iterator;
-
+import loja.Loja;
 import loja.Produto;
-import loja.Loja.Loja;
 
 public class Cliente extends User {
     private ArrayList<Produto> Carrinho = new ArrayList();
 
-    public Cliente(String nome, String cpf, String cep, Integer numero) {
+    public Cliente(String nome, String cpf, String cep, String numero) {
         super(nome, cpf, cep, numero);
     }
 
     @Override
     public void verPerfil(int index) {
-        System.out.println(index + " - " + this.Nome);
+        System.out.println(index + " - " + this.getNome());
     }
 
     public void AdicionarCarrinho(Produto prod) {
@@ -29,21 +27,16 @@ public class Cliente extends User {
 
     public void VerCatalogo(ArrayList<Loja> Lojas) {
         for(int i = 0; i < Lojas.size(); ++i) {
-            System.out.println("" + i + " - " + ((Loja)Lojas.get(i)).getNome());
-            ((Loja)Lojas.get(i)).MostrarProdutos();
+            System.out.println("" + i + " - " + (Lojas.get(i)).getNome());
+            (Lojas.get(i)).MostrarProdutos();
         }
 
     }
 
     public void Comprar(ArrayList<Loja> Lojas) {
-        Iterator var2 = Lojas.iterator();
-
-        while(var2.hasNext()) {
-            Loja loja = (Loja)var2.next();
-            Iterator var4 = this.Carrinho.iterator();
-
-            while(var4.hasNext()) {
-                Produto produto = (Produto)var4.next();
+    
+        for (Loja loja : Lojas) {
+            for (Produto produto : this.Carrinho) {
                 loja.venderProduto(produto);
             }
         }

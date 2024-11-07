@@ -5,14 +5,14 @@ import loja.Produto;
 public class Dono extends User {
     private Loja Loja;
 
-    public Dono(String nome, String cpf, String cep, Integer numero, Loja loja) {
+    public Dono(String nome, String cpf, String cep, String numero, Loja loja) {
         super(nome, cpf, cep, numero);
         this.Loja = loja;
     }
 
     @Override
     public void verPerfil(int index) {
-        System.out.println(index + " - " + this.Nome + " (" + this.Loja.getNome() + ")");
+        System.out.println(index + " - " + this.getNome() + " (" + this.Loja.getNome() + ")");
     }
 
     public void novoProduto(String nome, Float preco, Integer quantidade, Loja loja) {

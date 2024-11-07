@@ -1,4 +1,5 @@
 package loja;
+
 public class Produto {
     private String Nome;
     private Float Preco;
@@ -9,6 +10,7 @@ public class Produto {
         this.Nome = nome;
         this.Preco = preco;
         this.Quantidade = quantidade;
+        this.Loja = loja;
     }
 
     public String getNome() {

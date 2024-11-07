@@ -1,11 +1,14 @@
 package usuario;
-public abstract class User {
+
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
     private String Nome;
     private String CPF;
     private String CEP;
-    private Integer NumeroCep;
+    private String NumeroCep;
 
-    public User(String nome, String cpf, String cep, Integer numeroCep) {
+    public User(String nome, String cpf, String cep, String numeroCep) {
         this.Nome = nome;
         this.CPF = cpf;
         this.CEP = cep;
@@ -26,7 +29,7 @@ public abstract class User {
         return this.CEP;
     }
 
-    public Integer getNumeroCep() {
+    public String getNumeroCep() {
         return this.NumeroCep;
     }
 
@@ -42,7 +45,7 @@ public abstract class User {
         this.CEP = cEP;
     }
 
-    public void setNumeroCep(Integer numeroCep) {
+    public void setNumeroCep(String numeroCep) {
         this.NumeroCep = numeroCep;
     }
 }
