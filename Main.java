@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 import loja.Loja;
 import usuario.Cliente;
@@ -13,22 +12,8 @@ public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException  {
         Scanner scan = new Scanner(System.in);
 
-
-        // Criando um objeto Pessoa
-        User p1 = new Cliente("helkena", "cpf", "cep", "numero");
-        // Salvando o objeto pessoa (isso irá salvar no seu disco)
-        Serializable.salvarCliente(p1);
-        // Carregando a pessoa que salvamos (aqui carregamos do disco)
-        User p2 = Serializable.carregarCliente();
-        // Imprimindo informações da pessoa que foi carregada do arquivo 'pessoa.txt'
-        System.out.println(p2);
-
-
-        ArrayList<Loja> Lojas = new ArrayList();
-        ArrayList<Dono> Donos = new ArrayList();
-        ArrayList<Cliente> Clientes = new ArrayList();
-        Dono atual = new Dono(null, null, null, null, null);
-        Cliente atualCliente = new Cliente(null, null, null, null);
+        User atual = new Dono(null, null, null, null, null);
+        User atualCliente = new Cliente(null, null, null, null);
         boolean dentro = true;
         String locate = "1";
         String beforeLocate = "";
@@ -112,29 +97,31 @@ public class Main {
 
                 case "5":
                 
-                    if (Donos.size() == 0) {
+                    if (Serializable.sizeDonos() == 0) {
                         System.out.println("\nNENHUM DONO CADASTRADO");
                         locate = "2";
                         break;
                     }
 
                     int indexDonoAtual;
-                    for(indexDonoAtual = 0; indexDonoAtual < Donos.size(); ++indexDonoAtual) {
-                        Donos.get(indexDonoAtual).verPerfil(indexDonoAtual);
+                    for(indexDonoAtual = 0; indexDonoAtual < Serializable.sizeDonos(); ++indexDonoAtual) {
+                        Serializable.getDono(indexDonoAtual).verPerfil(indexDonoAtual);
                     }
 
                     indexDonoAtual = scan.nextInt();
                     scan.nextLine();
 
-                    atual = Donos.get(indexDonoAtual);
+                    atual = Serializable.getDono(indexDonoAtual);
                     System.out.println("Entrado como " + atual.getNome());
                     
+
+
                     locate = "2";
                     break;
                     
                 case "6":
                     
-                    if (Lojas.size() == 0) {
+                    if (Serializable.sizeLojas() == 0) {
                         System.out.println("\nNÃO EXISTEM LOJAS");
                         locate = "2";
                         break;
@@ -154,16 +141,16 @@ public class Main {
                     scan.nextLine();
 
                     int indexLojaDono;
-                    for(indexLojaDono = 0; indexLojaDono < Lojas.size(); ++indexLojaDono) {
-                        System.out.println(indexLojaDono + " - " + (Lojas.get(indexLojaDono)).getNome());
+                    for(indexLojaDono = 0; indexLojaDono < Serializable.sizeLojas(); ++indexLojaDono) {
+                        System.out.println(indexLojaDono + " - " + (Serializable.getDono(indexLojaDono)).getNome());
                     }
 
                     indexLojaDono = scan.nextInt();
                     scan.nextLine();
 
-                    atual = new Dono(nomeDono, cpfDono, cepDono, numeroDono, Lojas.get(indexLojaDono));
+                    atual = new Dono(nomeDono, cpfDono, cepDono, numeroDono, Serializable.getLoja(indexLojaDono));
                     System.out.println("Cadastrado e entrado como " + atual.getNome());
-                    Donos.add(atual);
+                    Serializable.salvarDono(atual);
 
                     //arrumar
                     locate = "2";
@@ -171,7 +158,7 @@ public class Main {
                 
                 case "7":
 
-                    if (Clientes.size() == 0) {
+                    if (Serializable.sizeClientes() == 0) {
                         System.out.println("\nNÃO TEM NENHUM CADASTRO");
                         locate = "3";
                         break;
@@ -179,14 +166,14 @@ public class Main {
 
                     int indexClienteAtual;
 
-                    for(indexClienteAtual = 0; indexClienteAtual < Clientes.size(); ++indexClienteAtual) {
-                        Clientes.get(indexClienteAtual).verPerfil(indexClienteAtual);
+                    for(indexClienteAtual = 0; indexClienteAtual < Serializable.sizeClientes(); ++indexClienteAtual) {
+                        Serializable.getCliente(indexClienteAtual).verPerfil(indexClienteAtual);
                     }
 
                     indexClienteAtual = scan.nextInt();
                     scan.nextLine();
 
-                    atualCliente = Clientes.get(indexClienteAtual);
+                    atualCliente = Serializable.getCliente(indexClienteAtual);
                     System.out.println("Entrado como " + atualCliente.getNome());
 
                     locate = "3";
@@ -207,7 +194,7 @@ public class Main {
                     scan.nextLine();
                     
                     atualCliente = new Cliente(nomeCliente, cpfCliente, cepCliente, numeroCliente);
-                    Clientes.add(atualCliente);
+                    Serializable.salvarCliente(atualCliente);
                     System.out.println("Cadastrado e entrado como " + atualCliente.getNome());       
                     
                     scan.useDelimiter("");
@@ -216,15 +203,15 @@ public class Main {
                 
                 case "9":
 
-                    if (Lojas.size() == 0) {
+                    if (Serializable.sizeLojas() == 0) {
                         System.out.println("NÃO HÁ LOJAS CADASTRADAS");
                     }
 
-                    for(int i = 0; i < Lojas.size(); ++i) {
+                    for(int i = 0; i < Serializable.sizeLojas(); ++i) {
                         
-                        System.out.println("Nome: " + Lojas.get(i).getNome());
-                        Lojas.get(i).MostrarProdutos();
-                        System.out.println("Total de vendas: " + Lojas.get(i).getTotalVendas() + "\n");
+                        System.out.println("Nome: " + Serializable.getLoja(i).getNome());
+                        Serializable.getLoja(i).MostrarProdutos();
+                        System.out.println("Total de vendas: " + Serializable.getLoja(i).getTotalVendas() + "\n");
                     }
 
                     locate = "4";
@@ -235,7 +222,7 @@ public class Main {
                     String newLojaNome = scan.nextLine();
 
                     Loja newLoja = new Loja(newLojaNome);
-                    Lojas.add(newLoja);
+                    Serializable.salvarLoja(newLoja);
                     
                     System.out.println("\nLoja inserida com sucesso.");
                     locate = "4";

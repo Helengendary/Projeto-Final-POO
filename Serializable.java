@@ -1,70 +1,110 @@
 import java.io.*;
+import java.util.ArrayList;
+import loja.Loja;
 import usuario.User;
 
 public class Serializable {
-    public static void salvarCliente(User p) throws IOException {
-        // Criamos um objeto que irá especificar o arquivo onde o objeto 'p'
-        // será salvo. A extensão do arquivo não precisa ser necessariamente '.p'.
-        // Eu poderia colocar qualquer extensão.
+
+    private static ArrayList<User> clientes = new ArrayList<>();
+    private static ArrayList<User> donos = new ArrayList<>();
+    private static ArrayList<Loja> lojas = new ArrayList<>();
+
+    public static Integer sizeClientes() throws ClassNotFoundException, IOException {
+        clientes = carregarCliente();
+        return clientes.size();
+    }
+    
+    public static Integer sizeDonos() throws ClassNotFoundException, IOException {
+        donos = carregarDono();
+        return donos.size();
+    }
+    
+    public static Integer sizeLojas() throws ClassNotFoundException, IOException {
+        lojas = carregarLoja();
+        return lojas.size();
+    }
+    
+    public static void salvarCliente(User p) throws IOException, ClassNotFoundException {
+        clientes = carregarCliente();
         FileOutputStream fos = new FileOutputStream("clientes.txt");
-        // Aqui criamos um outro objeto que é responsável por converter nosso
-        // objeto 'p' em um formato que pode ser reconstruído posteriormente
         ObjectOutputStream os = new ObjectOutputStream(fos);
-        // Escreve o objeto 'p' no arquivo
-        os.writeObject(p);
-        // Fecha o objeto de serialização
+
+        clientes.add(p);
+
+        os.writeObject(clientes);
         os.close();
-        // Fechamos o arquivo
         fos.close();
     }
 
-    public static User carregarCliente() throws IOException,
+    public static ArrayList<User> carregarCliente() throws IOException,
     ClassNotFoundException {
-        // Criamos um objeto que irá especificar o arquivo onde está salvo um objeto.
         FileInputStream fis = new FileInputStream("clientes.txt");
-        // Aqui criamos um objeto que irá reconstruir o objeto armazenado no
-        // 'fis' criado anteriormente
         ObjectInputStream is = new ObjectInputStream(fis);
-        // Lemos o objeto e convertemos ele do arquivo 'pessoa.txt'. Na sequência nós
-        // convertemos o objeto para o tipo 'Pessoa'
-        User p = (User) is.readObject();
-        // Fechamos o objeto de serialização
+        ArrayList<User> p = (ArrayList<User>) is.readObject();
+
         is.close();
-        // Fechamos o arquivo
         fis.close();
         return p;
     }
     
-    public static void salvarDono(User p) throws IOException {
-        // Criamos um objeto que irá especificar o arquivo onde o objeto 'p'
-        // será salvo. A extensão do arquivo não precisa ser necessariamente '.p'.
-        // Eu poderia colocar qualquer extensão.
+    public static User getCliente(Integer i) throws IOException,
+    ClassNotFoundException {
+        return clientes.get(i);
+    }
+
+    public static void salvarDono(User p) throws IOException, ClassNotFoundException {
+        donos = carregarDono();
         FileOutputStream fos = new FileOutputStream("donos.txt");
-        // Aqui criamos um outro objeto que é responsável por converter nosso
-        // objeto 'p' em um formato que pode ser reconstruído posteriormente
         ObjectOutputStream os = new ObjectOutputStream(fos);
-        // Escreve o objeto 'p' no arquivo
-        os.writeObject(p);
-        // Fecha o objeto de serialização
+
+        donos.add(p);
+
+        os.writeObject(donos);
         os.close();
-        // Fechamos o arquivo
         fos.close();
     }
 
-    public static User carregarDono() throws IOException,
+    public static ArrayList<User> carregarDono() throws IOException,
     ClassNotFoundException {
-        // Criamos um objeto que irá especificar o arquivo onde está salvo um objeto.
         FileInputStream fis = new FileInputStream("donos.txt");
-        // Aqui criamos um objeto que irá reconstruir o objeto armazenado no
-        // 'fis' criado anteriormente
         ObjectInputStream is = new ObjectInputStream(fis);
-        // Lemos o objeto e convertemos ele do arquivo 'pessoa.txt'. Na sequência nós
-        // convertemos o objeto para o tipo 'Pessoa'
-        User p = (User) is.readObject();
-        // Fechamos o objeto de serialização
+        ArrayList<User> p = (ArrayList<User>) is.readObject();
+
         is.close();
-        // Fechamos o arquivo
         fis.close();
         return p;
+    }
+    
+    public static User getDono(Integer i) throws IOException,
+    ClassNotFoundException {
+        return donos.get(i);
+    }
+
+    public static void salvarLoja(Loja p) throws IOException, ClassNotFoundException {
+        lojas = carregarLoja();
+        FileOutputStream fos = new FileOutputStream("lojas.txt");
+        ObjectOutputStream os = new ObjectOutputStream(fos);
+
+        lojas.add(p);
+
+        os.writeObject(lojas);
+        os.close();
+        fos.close();
+    }
+
+    public static ArrayList<Loja> carregarLoja() throws IOException,
+    ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("lojas.txt");
+        ObjectInputStream is = new ObjectInputStream(fis);
+        ArrayList<Loja> p = (ArrayList<Loja>) is.readObject();
+
+        is.close();
+        fis.close();
+        return p;
+    }
+    
+    public static Loja getLoja(Integer i) throws IOException,
+    ClassNotFoundException {
+        return lojas.get(i);
     }
 }
