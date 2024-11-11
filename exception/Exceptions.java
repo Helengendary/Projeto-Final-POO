@@ -1,8 +1,4 @@
-class VerifyExcepiton extends Exception {
-    public VerifyExcepiton(String mensagem) {
-        super("\n"+mensagem);
-    }
-}
+package exception;
 
 public class Exceptions {
 
