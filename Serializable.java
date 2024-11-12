@@ -5,10 +5,6 @@ import usuario.User;
 
 public class Serializable {
 
-    private static ArrayList<User> clientes = new ArrayList<>();
-    private static ArrayList<User> donos = new ArrayList<>();
-    private static ArrayList<Loja> lojas = new ArrayList<>();
-
     public static Integer sizeClientes() throws ClassNotFoundException, IOException {
         clientes = carregarCliente();
         return clientes.size();
@@ -24,8 +20,7 @@ public class Serializable {
         return lojas.size();
     }
     
-    public static void salvarCliente(User p) throws IOException, ClassNotFoundException {
-        clientes = carregarCliente();
+    public static void salvarCliente(User p, ArrayList<User>) throws IOException, ClassNotFoundException {
         FileOutputStream fos = new FileOutputStream("clientes.txt");
         ObjectOutputStream os = new ObjectOutputStream(fos);
 
@@ -36,12 +31,14 @@ public class Serializable {
         fos.close();
     }
 
+    @SuppressWarnings("unchecked")
     public static ArrayList<User> carregarCliente() throws IOException,
     ClassNotFoundException {
+
         FileInputStream fis = new FileInputStream("clientes.txt");
         ObjectInputStream is = new ObjectInputStream(fis);
         ArrayList<User> p = (ArrayList<User>) is.readObject();
-
+        
         is.close();
         fis.close();
         return p;
@@ -54,6 +51,10 @@ public class Serializable {
 
     public static void salvarDono(User p) throws IOException, ClassNotFoundException {
         donos = carregarDono();
+
+        if (carregarDono() == null) {
+            System.out.println("É NULLOOO");
+        }
         FileOutputStream fos = new FileOutputStream("donos.txt");
         ObjectOutputStream os = new ObjectOutputStream(fos);
 
@@ -82,25 +83,27 @@ public class Serializable {
 
     public static void salvarLoja(Loja p) throws IOException, ClassNotFoundException {
         lojas = carregarLoja();
-        FileOutputStream fos = new FileOutputStream("lojas.txt");
-        ObjectOutputStream os = new ObjectOutputStream(fos);
-
-        lojas.add(p);
-
-        os.writeObject(lojas);
-        os.close();
-        fos.close();
+        try (FileOutputStream fos = new FileOutputStream("lojas.txt"); ObjectOutputStream os = new ObjectOutputStream(fos)) {
+            
+            lojas.add(p);
+            
+            os.writeObject(lojas);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     public static ArrayList<Loja> carregarLoja() throws IOException,
     ClassNotFoundException {
-        FileInputStream fis = new FileInputStream("lojas.txt");
-        ObjectInputStream is = new ObjectInputStream(fis);
-        ArrayList<Loja> p = (ArrayList<Loja>) is.readObject();
-
-        is.close();
-        fis.close();
-        return p;
+        try {
+            ObjectInputStream is;
+            try (FileInputStream fis = new FileInputStream("lojas.txt")) {
+                is = new ObjectInputStream(fis);
+                is.close();
+            }
+            return (ArrayList<Loja>) is.readObject();
+        } catch (EOFException | FileNotFoundException e) {
+            return lojas;
+        }
     }
     
     public static Loja getLoja(Integer i) throws IOException,
