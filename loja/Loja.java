@@ -1,7 +1,9 @@
 package loja;
+
 import java.util.ArrayList;
 
 public class Loja {
+
     private  String Nome;
     private  ArrayList<Produto> Produtos;
     private  Integer TotalVendas;
