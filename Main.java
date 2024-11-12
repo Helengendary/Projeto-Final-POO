@@ -1,4 +1,7 @@
+import exception.Exceptions;
+import exception.VerifyExcepiton;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import loja.Loja;
 import usuario.Cliente;
@@ -97,21 +100,21 @@ public class Main {
 
                 case "5":
                 
-                    if (serial.sizeDonos() == 0) {
+                    if (Serializable.sizeDonos() == 0) {
                         System.out.println("\nNENHUM DONO CADASTRADO");
                         locate = "2";
                         break;
                     }
 
                     int indexDonoAtual;
-                    for(indexDonoAtual = 0; indexDonoAtual < serial.sizeDonos(); ++indexDonoAtual) {
-                        serial.getDono(indexDonoAtual).verPerfil(indexDonoAtual);
+                    for(indexDonoAtual = 0; indexDonoAtual < Serializable.sizeDonos(); ++indexDonoAtual) {
+                        Serializable.getDono(indexDonoAtual).verPerfil(indexDonoAtual);
                     }
 
                     indexDonoAtual = scan.nextInt();
                     scan.nextLine();
 
-                    atual = serial.getDono(indexDonoAtual);
+                    atual = Serializable.getDono(indexDonoAtual);
                     System.out.println("Entrado como " + atual.getNome());
                     
 
@@ -121,7 +124,7 @@ public class Main {
                     
                 case "6":
                     
-                    if (serial.sizeLojas() == 0) {
+                    if (Serializable.sizeLojas() == 0) {
                         System.out.println("\nNÃO EXISTEM LOJAS");
                         locate = "2";
                         break;
@@ -141,16 +144,16 @@ public class Main {
                     scan.nextLine();
 
                     int indexLojaDono;
-                    for(indexLojaDono = 0; indexLojaDono < serial.sizeLojas(); ++indexLojaDono) {
-                        System.out.println(indexLojaDono + " - " + (serial.getDono(indexLojaDono)).getNome());
+                    for(indexLojaDono = 0; indexLojaDono < Serializable.sizeLojas(); ++indexLojaDono) {
+                        System.out.println(indexLojaDono + " - " + (Serializable.getDono(indexLojaDono)).getNome());
                     }
 
                     indexLojaDono = scan.nextInt();
                     scan.nextLine();
 
-                    atual = new Dono(nomeDono, cpfDono, cepDono, numeroDono, serial.getLoja(indexLojaDono));
+                    atual = new Dono(nomeDono, cpfDono, cepDono, numeroDono, Serializable.getLoja(indexLojaDono));
                     System.out.println("Cadastrado e entrado como " + atual.getNome());
-                    serial.salvarDono(atual);
+                    Serializable.salvarDono(atual);
 
                     //arrumar
                     locate = "2";
@@ -158,7 +161,7 @@ public class Main {
                 
                 case "7":
 
-                    if (serial.sizeClientes() == 0) {
+                    if (Serializable.sizeClientes() == 0) {
                         System.out.println("\nNÃO TEM NENHUM CADASTRO");
                         locate = "3";
                         break;
@@ -166,14 +169,14 @@ public class Main {
 
                     int indexClienteAtual;
 
-                    for(indexClienteAtual = 0; indexClienteAtual < serial.sizeClientes(); ++indexClienteAtual) {
-                        serial.getCliente(indexClienteAtual).verPerfil(indexClienteAtual);
+                    for(indexClienteAtual = 0; indexClienteAtual < Serializable.sizeClientes(); ++indexClienteAtual) {
+                        Serializable.getCliente(indexClienteAtual).verPerfil(indexClienteAtual);
                     }
 
                     indexClienteAtual = scan.nextInt();
                     scan.nextLine();
 
-                    atualCliente = serial.getCliente(indexClienteAtual);
+                    atualCliente = Serializable.getCliente(indexClienteAtual);
                     System.out.println("Entrado como " + atualCliente.getNome());
 
                     locate = "3";
@@ -194,7 +197,7 @@ public class Main {
                     scan.nextLine();
                     
                     atualCliente = new Cliente(nomeCliente, cpfCliente, cepCliente, numeroCliente);
-                    serial.salvarCliente(atualCliente);
+                    Serializable.salvarCliente(atualCliente);
                     System.out.println("Cadastrado e entrado como " + atualCliente.getNome());       
                     
                     scan.useDelimiter("");
@@ -203,15 +206,15 @@ public class Main {
                 
                 case "9":
 
-                    if (serial.sizeLojas() == 0) {
+                    if (Serializable.sizeLojas() == 0) {
                         System.out.println("NÃO HÁ LOJAS CADASTRADAS");
                     }
 
-                    for(int i = 0; i < serial.sizeLojas(); ++i) {
+                    for(int i = 0; i < Serializable.sizeLojas(); ++i) {
                         
-                        System.out.println("Nome: " + serial.getLoja(i).getNome());
-                        serial.getLoja(i).MostrarProdutos();
-                        System.out.println("Total de vendas: " + serial.getLoja(i).getTotalVendas() + "\n");
+                        System.out.println("Nome: " + Serializable.getLoja(i).getNome());
+                        Serializable.getLoja(i).MostrarProdutos();
+                        System.out.println("Total de vendas: " + Serializable.getLoja(i).getTotalVendas() + "\n");
                     }
 
                     locate = "4";
@@ -222,7 +225,7 @@ public class Main {
                     String newLojaNome = scan.nextLine();
 
                     Loja newLoja = new Loja(newLojaNome);
-                    serial.salvarLoja(newLoja);
+                    Serializable.salvarLoja(newLoja);
                     
                     System.out.println("\nLoja inserida com sucesso.");
                     locate = "4";
