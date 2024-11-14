@@ -29,6 +29,18 @@ public class Cartao extends PagamentoBase {
         }
     }
 
+    @Override
+    public boolean autorizarPagamento(String Senha, User user) {
+        System.out.println("Senha:");
+        String senhaUsuario = scan.nextLine();
+
+        if (user.getSenha().equals(senhaUsuario)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public String getNumeroCartao() {
         return numeroCartao;
     }
@@ -52,27 +64,9 @@ public class Cartao extends PagamentoBase {
     public void setCvv(String cvv) {
         this.cvv = cvv;
     }
-
-    @Override
-    public void gerarCodigo() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean autorizarPagamento(String Senha, User user) {
-        System.out.println("Senha:");
-        String senhaUsuario = scan.nextLine();
-
-        if (user.getSenha().equals(senhaUsuario)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean autorizarPagamento(User user) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     
+    @Override
+    public String gerarCodigo() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
