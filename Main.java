@@ -38,8 +38,10 @@ public class Main {
             }
             while(dentro) {
                 switch (locate) {
-                    case "0" -> dentro = false;
-                    case "1" -> {
+                    case "0": 
+                        dentro = false;
+                        break;
+                    case "1":
                         System.out.print("\nMenu Principal\n2 - Dono de loja\n3 - Usuário\n4 - Registrar Loja\n0 - Fechar\nR:");
                         beforeLocate = scan.nextLine();
 
@@ -51,9 +53,8 @@ public class Main {
                         }
 
                         locate = beforeLocate;
-                    }
-
-                    case "2" -> {
+                        break;
+                    case "2":
                         System.out.print("\nMenu Dono da Loja\n5 - Entrar\n6 - Cadastrar\n1 - Voltar\nR:");
                         beforeLocate = scan.nextLine();
                         
@@ -66,9 +67,9 @@ public class Main {
                         }
 
                         locate = beforeLocate;
-                    }
+                        break;
 
-                    case "3" -> {
+                    case "3":
                         System.out.print("\nMenu Usuário\n7 - Entrar\n8 - Cadastrar\n1 - Voltar\nR:");
                         beforeLocate = scan.next();
                         scan.nextLine();
@@ -81,9 +82,9 @@ public class Main {
                         }
                         
                         locate = beforeLocate;
-                    }
+                        break;
 
-                    case "4" -> {
+                    case "4":
                         System.out.println("\nMenu Registrar Loja\n9 - Ver\n10 - Registrar\n1 - Voltar\nR:");
                         
                         beforeLocate = scan.next();
@@ -97,9 +98,9 @@ public class Main {
                         }
                         
                         locate = beforeLocate;
-                    }
+                        break;
 
-                    case "5" -> {
+                    case "5":
                         donos = Serializacao.carregarDono();
 
                         if (donos.isEmpty()) {
@@ -121,9 +122,9 @@ public class Main {
                         System.out.println("Entrado como " + atualDono.getNome());
                         
                         locate = "11";
-                    }
+                        break;
                         
-                    case "6" -> {
+                    case "6":
                         lojas = Serializacao.carregarLoja();
 
                         if (lojas.isEmpty()) {
@@ -142,9 +143,9 @@ public class Main {
                         Serializacao.salvarDono(donos);
 
                         locate = "11";
-                    }
+                        break;
                     
-                    case "7" -> {
+                    case "7":
                         clientes = Serializacao.carregarCliente();
 
                         if (clientes.isEmpty()) {
@@ -166,9 +167,9 @@ public class Main {
                         System.out.println("Entrado como " + atualCliente.getNome());
 
                         locate = "3";
-                    }
+                        break;
 
-                    case "8" -> {
+                    case "8":
                         Cliente newcli = new Cliente(null, null, null, null, null);
 
                         atualCliente = newcli.cadastrar(newcli, lojas);
@@ -179,9 +180,9 @@ public class Main {
                         System.out.println("Cadastrado e entrado como " + atualCliente.getNome());
                         
                         locate = "3";
-                    }
+                        break;
                     
-                    case "9" -> {
+                    case "9":
                         lojas = Serializacao.carregarLoja();
 
                         if (lojas.isEmpty()) {
@@ -196,9 +197,9 @@ public class Main {
                         }
 
                         locate = "4";
-                    }
+                        break;
                     
-                    case "10" -> {
+                    case "10":
                         lojas = Serializacao.carregarLoja();
 
                         System.out.print("\nNome: ");
@@ -212,27 +213,30 @@ public class Main {
                         
                         System.out.println("\nLoja inserida com sucesso.");
                         locate = "4";
-                    }
+                        break;
                     
-                    case "11" -> {
+                    case "11":
                         System.out.println("\nMENU DO DONO\n12 - Registrar Produto\n13 - Excluir Produto\n14 - Ver quantidade de vendas\n2 - Voltar");
-                        scan.nextLine();
+                        beforeLocate = scan.nextLine();
 
                         try {
-                            Exceptions.verificarValor(beforeLocate, "12|13|13|");
+                            Exceptions.verificarValor(beforeLocate, "12|13|14|2|");
                         } catch (VerifyExcepiton e) {
                             System.out.println(e.getMessage());
                             break;
                         }
-                    }
+
+                        locate = beforeLocate;
+
+                        break;
                     
-                    case "12" -> {
+                    case "12":
                         System.out.print("\nCadastro de Produto\nNome: ");
                         String nomeNewProduto = scan.next();
                         scan.nextLine();
                         System.out.print("Preço: ");
-                        Float precoNewProduto = scan.nextFloat();
-                        scan.nextLine();
+                        String precoStringToFloat = scan.nextLine();
+                        Float precoNewProduto = Float.parseFloat(precoStringToFloat);
                         System.out.print("Quantidade: ");
                         int quantNewProduto = scan.nextInt();
                         scan.nextLine();
@@ -240,29 +244,37 @@ public class Main {
                         Dono donoProduto = (Dono) atualDono;
 
                         donoProduto.novoProduto(nomeNewProduto, precoNewProduto, quantNewProduto, donoProduto.getLoja());
+                        Serializacao.salvarLoja(lojas);
 
                         locate = "11";
-                    }
-                    case "13" -> {
+                        break;
+
+                    case "13":
                         Dono donoExcluir = (Dono) atualDono;
                         
                         ArrayList<Produto> produtos = donoExcluir.getLoja().getProdutos();
 
-                        int indexProdutoExcluir;
-                        for(indexProdutoExcluir = 0; indexProdutoExcluir < produtos.size(); ++indexProdutoExcluir) {
-                            System.out.println("" + indexProdutoExcluir + " - " + produtos.get(indexProdutoExcluir).getNome());
+                        if (produtos.size() != 0) {
+                            int indexProdutoExcluir;
+                            for(indexProdutoExcluir = 0; indexProdutoExcluir < produtos.size(); ++indexProdutoExcluir) {
+                                System.out.println("" + indexProdutoExcluir + " - " + produtos.get(indexProdutoExcluir).getNome());
+                            }
+    
+                            String excloi = scan.nextLine();
+                            // criar exception para validar se é do tamanho do array e se é numero
+                            produtos.remove(indexProdutoExcluir);
+                        } else {
+                            System.out.println("Nenhum produto cadastrado!");
                         }
-
-                        indexProdutoExcluir = scan.nextInt();
-
-                        produtos.remove(indexProdutoExcluir);
                         
                         locate = "11";
-                    }
-                    default -> System.out.println("Ta no default");
-                    
+                        break;
+                    default:
+                        System.out.println("Ta no default");
+                        break;
                 }
             }
+
         }
     }
 }
