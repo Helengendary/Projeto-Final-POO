@@ -6,8 +6,8 @@ import loja.Produto;
 public class Cliente extends User {
     private ArrayList<Produto> Carrinho = new ArrayList();
 
-    public Cliente(String nome, String cpf, String cep, String numero) {
-        super(nome, cpf, cep, numero);
+    public Cliente(String nome, String cpf, String cep, String numero, String senha) {
+        super(nome, cpf, cep, numero, senha);
     }
 
     public void AdicionarCarrinho(Produto prod) {

@@ -11,13 +11,15 @@ public class User implements Serializable {
     private String CPF;
     private String CEP;
     private String NumeroCep;
+    private String Senha;
     private static final long serialVersionUID = 1001L;
 
-    public User(String nome, String cpf, String cep, String numeroCep) {
+    public User(String nome, String cpf, String cep, String numeroCep, String senha) {
         this.Nome = nome;
         this.CPF = cpf;
         this.CEP = cep;
         this.NumeroCep = numeroCep;
+        this.Senha = senha;
     }
 
 
@@ -36,6 +38,9 @@ public class User implements Serializable {
         
         System.out.print("Numero do endereço: ");
         user.setNumeroCep(scan.next());
+        
+        System.out.print("Senha: ");
+        user.setSenha(scan.next());
         scan.nextLine();
         return user;
     }
@@ -70,5 +75,13 @@ public class User implements Serializable {
 
     public void setNumeroCep(String numeroCep) {
         this.NumeroCep = numeroCep;
+    }
+
+    public String getSenha() {
+        return Senha;
+    }
+
+    public void setSenha(String Senha) {
+        this.Senha = Senha;
     }
 }

@@ -7,8 +7,8 @@ import loja.Produto;
 public class Dono extends User {
     private Loja Loja;
 
-    public Dono(String nome, String cpf, String cep, String numero, Loja loja) {
-        super(nome, cpf, cep, numero);
+    public Dono(String nome, String cpf, String cep, String numero, Loja loja, String senha) {
+        super(nome, cpf, cep, numero, senha);
         this.Loja = loja;
     }
 
@@ -30,6 +30,9 @@ public class Dono extends User {
 
         System.out.print("Numero do endereço:");
         dono.setNumeroCep(scan.next());
+
+        System.out.print("Senha:");
+        dono.setNumeroCep(scan.next());
         scan.nextLine();
 
         int indexLojaDono;
@@ -47,11 +50,11 @@ public class Dono extends User {
     public void novoProduto(String nome, Float preco, Integer quantidade, Loja loja) {
         Produto produto = new Produto(nome, preco, quantidade, this.Loja);
         loja.getProdutos().add(produto);
-        System.out.println("Produto registrado com sucesso!");
+        System.out.println("\nProduto registrado com sucesso!");
     }
 
     public void retirarProduto(Produto produto) {
-        System.out.println("Produto retirado com sucesso");
+        System.out.println("\nProduto retirado com sucesso");
         this.Loja.getProdutos().remove(produto);
     }
 
