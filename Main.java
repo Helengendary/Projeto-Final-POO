@@ -167,7 +167,7 @@ public class Main {
                         atualCliente = clientes.get(indexClienteAtual);
                         System.out.println("Entrado como " + atualCliente.getNome());
 
-                        locate = "3";
+                        locate = "15";
                         break;
 
                     case "8":
@@ -180,7 +180,7 @@ public class Main {
                         Serializacao.salvarCliente(clientes);
                         System.out.println("Cadastrado e entrado como " + atualCliente.getNome());
                         
-                        locate = "3";
+                        locate = "15";
                         break;
                     
                     case "9":
@@ -232,6 +232,9 @@ public class Main {
                         break;
                     
                     case "12":
+
+                        lojas = Serializacao.carregarLoja();
+
                         System.out.print("\nCadastro de Produto\nNome: ");
                         String nomeNewProduto = scan.next();
                         scan.nextLine();
@@ -244,7 +247,21 @@ public class Main {
 
                         Dono donoProduto = (Dono) atualDono;
 
-                        donoProduto.novoProduto(nomeNewProduto, precoNewProduto, quantNewProduto, donoProduto.getLoja());
+                        lojas = Serializacao.carregarLoja();
+
+                        for (int i = 0; i < lojas.size(); i++) {
+                            if (lojas.get(i).getNome().equals(donoProduto.getLoja().getNome())) {
+                                lojas.set( i, donoProduto.novoProduto(nomeNewProduto, precoNewProduto, quantNewProduto, donoProduto.getLoja()));
+                            }
+                        }
+
+                        for (int i = 0; i < donos.size(); i++) {
+                            if (donos.get(i).equals(atualDono)) {
+                                donos.set(i, donoProduto);
+                            }
+                        }
+
+                        Serializacao.salvarLoja(lojas);
                         Serializacao.salvarDono(donos);
 
                         locate = "11";
@@ -287,6 +304,66 @@ public class Main {
                         }
                         
                         locate = "11";
+                        break; 
+                    case "15":
+                        System.out.println("\nMENU CLIENTE:\n16 - Ir as compras\n17 - Ver Carrinho\n3 - Voltar\n");
+                        beforeLocate = scan.nextLine();
+
+                        try {
+                            Exceptions.verificarValor(beforeLocate, "16|17|3|");
+                        } catch (VerifyExcepiton e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
+
+                        locate = beforeLocate;
+                        break;
+                    case "16":
+                        lojas = Serializacao.carregarLoja();
+                        Cliente clienteCatalogo = (Cliente) atualCliente;
+                        clienteCatalogo.VerCatalogo(lojas);
+
+                        System.out.println("Numero da loja que deseja comprar: ");
+                        int compraLoja = scan.nextInt();
+                        
+                        System.out.println("Numero do produto que deseja adicionar ao carrinho: ");
+                        int compraProduto = scan.nextInt();
+                        scan.nextLine();
+
+                        clienteCatalogo.AdicionarCarrinho(lojas.get(compraLoja).getProdutos().get(compraProduto));
+
+                        clientes = Serializacao.carregarCliente();
+
+                        for (int i = 0; i < clientes.size(); i++) {
+                            if (clientes.get(i).equals(atualCliente)) {
+                                clientes.set(i, clienteCatalogo);
+                                System.err.println("\natualizou o cliente");
+                            }
+                        }
+
+                        Serializacao.salvarCliente(clientes);
+
+                        locate = "15";      
+                        break;
+                    case "17":
+                        Cliente clienteCarrinho = (Cliente) atualCliente;
+
+                        for (int i = 0; i < clienteCarrinho.getCarrinho().size(); i++) {
+                            System.out.println(i + " - " + clienteCarrinho.getCarrinho().get(i).getNome() + ", R$ " + clienteCarrinho.getCarrinho().get(i).getPreco());
+                        }
+        
+                        System.out.println("\nMEU CARRINHO\n18 - Realizar Compra\n19 - Esvaziar Carrinho\n15 - Voltar\n");
+                        beforeLocate = scan.nextLine();
+
+                        try {
+                            Exceptions.verificarValor(beforeLocate, "18|19|15|");
+                        } catch (VerifyExcepiton e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
+
+                        locate = "15";
+                        // locate = beforeLocate;
                         break;
                     default:
                         System.out.println("Ta no default");

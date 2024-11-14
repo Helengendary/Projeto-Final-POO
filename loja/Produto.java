@@ -1,6 +1,8 @@
 package loja;
 
-public class Produto {
+import java.io.Serializable;
+
+public class Produto implements Serializable {
     private String Nome;
     private Float Preco;
     private Integer Quantidade;
@@ -12,6 +14,8 @@ public class Produto {
         this.Quantidade = quantidade;
         this.Loja = loja;
     }
+
+    private static final long serialVersionUID = 1L;
 
     public String getNome() {
         return Nome;

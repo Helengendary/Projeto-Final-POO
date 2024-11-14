@@ -47,10 +47,11 @@ public class Dono extends User {
         return dono;
     }
 
-    public void novoProduto(String nome, Float preco, Integer quantidade, Loja loja) {
+    public Loja novoProduto(String nome, Float preco, Integer quantidade, Loja loja) {
         Produto produto = new Produto(nome, preco, quantidade, this.Loja);
         loja.getProdutos().add(produto);
         System.out.println("\nProduto registrado com sucesso!");
+        return loja;
     }
 
     public void retirarProduto(Produto produto) {

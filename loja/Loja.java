@@ -24,7 +24,7 @@ public class Loja implements Serializable{
 
         for (int i = 0; i < Produtos.size(); i++) {
 
-            System.out.println(i + " - "  + Produtos.get(i).getNome() + ", R$" + Produtos.get(i).getPreco());
+            System.out.println("\t" + i + " - "  + Produtos.get(i).getNome() + ", R$" + Produtos.get(i).getPreco());
         }
     }
 
