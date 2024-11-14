@@ -21,6 +21,7 @@ public class Main {
             ArrayList<User> clientes = new ArrayList<>();
             ArrayList<User> donos = new ArrayList<>();
             ArrayList<Loja> lojas = new ArrayList<>();
+            ArrayList<Produto> produtos = new ArrayList<>();
 
             boolean dentro = true;
             String locate = "1";
@@ -216,7 +217,7 @@ public class Main {
                         break;
                     
                     case "11":
-                        System.out.println("\nMENU DO DONO\n12 - Registrar Produto\n13 - Excluir Produto\n14 - Ver quantidade de vendas\n2 - Voltar");
+                        System.out.println("\nMENU DO DONO\n12 - Registrar Produto\n13 - Excluir Produto\n14 - Ver produtos\n2 - Voltar");
                         beforeLocate = scan.nextLine();
 
                         try {
@@ -244,7 +245,7 @@ public class Main {
                         Dono donoProduto = (Dono) atualDono;
 
                         donoProduto.novoProduto(nomeNewProduto, precoNewProduto, quantNewProduto, donoProduto.getLoja());
-                        Serializacao.salvarLoja(lojas);
+                        Serializacao.salvarDono(donos);
 
                         locate = "11";
                         break;
@@ -252,19 +253,37 @@ public class Main {
                     case "13":
                         Dono donoExcluir = (Dono) atualDono;
                         
-                        ArrayList<Produto> produtos = donoExcluir.getLoja().getProdutos();
+                        produtos = donoExcluir.getLoja().getProdutos();
 
-                        if (produtos.size() != 0) {
+                        if (produtos.size() > 0) {
                             int indexProdutoExcluir;
                             for(indexProdutoExcluir = 0; indexProdutoExcluir < produtos.size(); ++indexProdutoExcluir) {
                                 System.out.println("" + indexProdutoExcluir + " - " + produtos.get(indexProdutoExcluir).getNome());
                             }
     
                             String excloi = scan.nextLine();
-                            // criar exception para validar se é do tamanho do array e se é numero
+                            // criar exception para validar se é do tamanho do array e se é numero e transformar em string
                             produtos.remove(indexProdutoExcluir);
                         } else {
-                            System.out.println("Nenhum produto cadastrado!");
+                            System.out.println("NENHUM PRODUTO CADASTRADO!");
+                        }
+                        
+                        locate = "11";
+                        break;
+                    
+                    case "14":
+                        Dono donoprodutos = (Dono) atualDono;
+                        
+                        produtos = donoprodutos.getLoja().getProdutos();
+
+                        if (produtos.size() > 0) {
+                            int indexProdutoExcluir;
+                            for(indexProdutoExcluir = 0; indexProdutoExcluir < produtos.size(); ++indexProdutoExcluir) {
+                                System.out.println(produtos.get(indexProdutoExcluir).getNome()+"\n\t"+"R$"+produtos.get(indexProdutoExcluir).getPreco()+"\n\t"+"Quantidade"+produtos.get(indexProdutoExcluir).getQuantidade());
+                            }
+
+                        } else {
+                            System.out.println("NENHUM PRODUTO CADASTRADO!");
                         }
                         
                         locate = "11";
