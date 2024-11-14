@@ -16,11 +16,15 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         User atual = new Dono(null, null, null, null, null);
         User atualCliente = new Cliente(null, null, null, null);
+
+        ArrayList<User> clientes = new ArrayList<>();
+        ArrayList<User> donos = new ArrayList<>();
+        ArrayList<Loja> lojas = new ArrayList<>();
+
         boolean dentro = true;
         String locate = "1";
         String beforeLocate = "";
         Exceptions err = new Exceptions();
-        Serializable serial = new Serializable();
         FileInputStream stream = new FileInputStream("apresentacao.txt");
         InputStreamReader reader = new InputStreamReader(stream);
         BufferedReader br = new BufferedReader(reader);
@@ -100,21 +104,24 @@ public class Main {
 
                 case "5":
                 
-                    if (Serializable.sizeDonos() == 0) {
+                    donos = Serializacao.carregarDono();
+
+                    if (donos.size() == 0) {
                         System.out.println("\nNENHUM DONO CADASTRADO");
                         locate = "2";
                         break;
                     }
 
                     int indexDonoAtual;
-                    for(indexDonoAtual = 0; indexDonoAtual < Serializable.sizeDonos(); ++indexDonoAtual) {
-                        Serializable.getDono(indexDonoAtual).verPerfil(indexDonoAtual);
+                    for(indexDonoAtual = 0; indexDonoAtual < donos.size(); ++indexDonoAtual) {
+                        Dono dono = (Dono) donos.get(indexDonoAtual);
+                        System.out.println(indexDonoAtual + " - " + dono.getNome() + " (" + dono.getLoja().getNome() + ")");
                     }
 
                     indexDonoAtual = scan.nextInt();
                     scan.nextLine();
 
-                    atual = Serializable.getDono(indexDonoAtual);
+                    atual = donos.get(indexDonoAtual);
                     System.out.println("Entrado como " + atual.getNome());
                     
 
@@ -123,37 +130,23 @@ public class Main {
                     break;
                     
                 case "6":
-                    
-                    if (Serializable.sizeLojas() == 0) {
+
+                    lojas = Serializacao.carregarLoja();
+
+                    if (lojas.size() == 0) {
                         System.out.println("\nNÃO EXISTEM LOJAS");
                         locate = "2";
                         break;
                     }
 
-                    System.out.print("\nCadatro Dono de Loja\nNome: ");
-                    String nomeDono = scan.nextLine();
+                    User dono = new Dono(null, null, null, null, null);
 
-                    System.out.print("CPF:");
-                    String cpfDono = scan.next();
-
-                    System.out.print("CEP:");
-                    String cepDono = scan.next();
-
-                    System.out.print("Numero do endereço:");
-                    String numeroDono = scan.next();
-                    scan.nextLine();
-
-                    int indexLojaDono;
-                    for(indexLojaDono = 0; indexLojaDono < Serializable.sizeLojas(); ++indexLojaDono) {
-                        System.out.println(indexLojaDono + " - " + (Serializable.getDono(indexLojaDono)).getNome());
-                    }
-
-                    indexLojaDono = scan.nextInt();
-                    scan.nextLine();
-
-                    atual = new Dono(nomeDono, cpfDono, cepDono, numeroDono, Serializable.getLoja(indexLojaDono));
+                    atual = dono.cadastrar(dono, lojas);
                     System.out.println("Cadastrado e entrado como " + atual.getNome());
-                    Serializable.salvarDono(atual);
+
+                    donos = Serializacao.carregarDono();
+                    donos.add(atual);
+                    Serializacao.salvarDono(donos);
 
                     //arrumar
                     locate = "2";
@@ -161,7 +154,9 @@ public class Main {
                 
                 case "7":
 
-                    if (Serializable.sizeClientes() == 0) {
+                    clientes = Serializacao.carregarCliente();
+
+                    if (clientes.size() == 0) {
                         System.out.println("\nNÃO TEM NENHUM CADASTRO");
                         locate = "3";
                         break;
@@ -169,68 +164,93 @@ public class Main {
 
                     int indexClienteAtual;
 
-                    for(indexClienteAtual = 0; indexClienteAtual < Serializable.sizeClientes(); ++indexClienteAtual) {
-                        Serializable.getCliente(indexClienteAtual).verPerfil(indexClienteAtual);
+                    for(indexClienteAtual = 0; indexClienteAtual < clientes.size(); ++indexClienteAtual) {
+                        System.out.println(indexClienteAtual + " - " + clientes.get(indexClienteAtual).getNome());
                     }
 
                     indexClienteAtual = scan.nextInt();
                     scan.nextLine();
 
-                    atualCliente = Serializable.getCliente(indexClienteAtual);
+                    atualCliente = clientes.get(indexClienteAtual);
                     System.out.println("Entrado como " + atualCliente.getNome());
 
                     locate = "3";
                     break;
 
                 case "8":
-                    System.out.print("\nCadatro:\nNome: ");
-                    String nomeCliente = scan.nextLine();
                     
-                    System.out.print("CPF:");
-                    String cpfCliente = scan.next();
-                    
-                    System.out.print("CEP:");
-                    String cepCliente = scan.next();
-                    
-                    System.out.print("Numero do endereço: ");
-                    String numeroCliente = scan.next();
-                    scan.nextLine();
-                    
-                    atualCliente = new Cliente(nomeCliente, cpfCliente, cepCliente, numeroCliente);
-                    Serializable.salvarCliente(atualCliente);
+                    Cliente newcli = new Cliente(null, null, null, null);
+
+                    atualCliente = newcli.cadastrar(newcli, lojas);
+
+                    clientes = Serializacao.carregarCliente();
+                    clientes.add(atualCliente);
+                    Serializacao.salvarCliente(clientes);
                     System.out.println("Cadastrado e entrado como " + atualCliente.getNome());       
-                    
-                    scan.useDelimiter("");
+
                     locate = "3";
                     break;
                 
                 case "9":
 
-                    if (Serializable.sizeLojas() == 0) {
+                    lojas = Serializacao.carregarLoja();
+
+                    if (lojas.size() == 0) {
                         System.out.println("NÃO HÁ LOJAS CADASTRADAS");
                     }
 
-                    for(int i = 0; i < Serializable.sizeLojas(); ++i) {
+                    for(int i = 0; i < lojas.size(); ++i) {
                         
-                        System.out.println("Nome: " + Serializable.getLoja(i).getNome());
-                        Serializable.getLoja(i).MostrarProdutos();
-                        System.out.println("Total de vendas: " + Serializable.getLoja(i).getTotalVendas() + "\n");
+                        System.out.println("Nome: " + lojas.get(i).getNome());
+                        lojas.get(i).MostrarProdutos();
+                        System.out.println("Total de vendas: " + lojas.get(i).getTotalVendas() + "\n");
                     }
 
                     locate = "4";
                     break;
                 
                 case "10":
+                    lojas = Serializacao.carregarLoja();
+
                     System.out.print("\nNome: ");
                     String newLojaNome = scan.nextLine();
 
                     Loja newLoja = new Loja(newLojaNome);
-                    Serializable.salvarLoja(newLoja);
+
+                    lojas.add(newLoja);
+
+                    Serializacao.salvarLoja(lojas);
                     
                     System.out.println("\nLoja inserida com sucesso.");
                     locate = "4";
                     break;
+                
+                case "11":
+                    System.out.println("\nMENU DO DONO\n12 - Registrar Produto\n13 - Excluir Produto\n14 - Ver quantidade de vendas\n2 - Voltar");
+                    locate = scan.next();
 
+                    try {
+                        err.verificarValor(beforeLocate, "11|12|10|");
+                    } catch (VerifyExcepiton e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+
+                    break;
+                
+                // case "12":
+                //     System.out.print("\nCadastro de Produto\nNome: ");
+                //     String nomeNewProduto = scan.next();
+                //     scan.nextLine();
+                //     System.out.print("Preço: ");
+                //     Float precoNewProduto = scan.nextFloat();
+                //     scan.nextLine();
+                //     System.out.print("Quantidade: ");
+                //     int quantNewProduto = scan.nextInt();
+                //     scan.nextLine();
+                //     atual.novoProduto(nomeNewProduto, precoNewProduto, quantNewProduto, atual.getLoja());
+                //     locate = 9;
+                //     break;
                 default:
                     System.out.println("Ta no default");
                 

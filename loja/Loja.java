@@ -1,12 +1,14 @@
 package loja;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Loja {
+public class Loja implements Serializable{
 
     private  String Nome;
     private  ArrayList<Produto> Produtos;
     private  Integer TotalVendas;
+    private static final long serialVersionUID = 1002L;
 
     public Loja(String nome) {
         this.Nome = nome;

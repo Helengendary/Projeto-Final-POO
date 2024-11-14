@@ -1,4 +1,6 @@
 package usuario;
+import java.util.ArrayList;
+import java.util.Scanner;
 import loja.Loja;
 import loja.Produto;
 
@@ -10,9 +12,36 @@ public class Dono extends User {
         this.Loja = loja;
     }
 
+    private transient Scanner scan = new Scanner(System.in);
+
     @Override
-    public void verPerfil(int index) {
-        System.out.println(index + " - " + this.getNome() + " (" + this.Loja.getNome() + ")");
+    public User cadastrar(User user, ArrayList<Loja> lojas) {
+
+        Dono dono = (Dono) user;
+
+        System.out.print("\nCadatro Dono de Loja\nNome: ");
+        dono.setNome(scan.nextLine());
+
+        System.out.print("CPF:");
+        dono.setCPF(scan.next());
+
+        System.out.print("CEP:");
+        dono.setCEP(scan.next());
+
+        System.out.print("Numero do endereço:");
+        dono.setNumeroCep(scan.next());
+        scan.nextLine();
+
+        int indexLojaDono;
+        
+        for(indexLojaDono = 0; indexLojaDono < lojas.size(); ++indexLojaDono) {
+            System.out.println(indexLojaDono + " - " + lojas.get(indexLojaDono).getNome());
+        }
+
+        dono.setLoja(lojas.get(scan.nextInt()));
+        scan.nextLine();
+        
+        return dono;
     }
 
     public void novoProduto(String nome, Float preco, Integer quantidade, Loja loja) {

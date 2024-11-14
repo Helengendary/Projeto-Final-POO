@@ -1,12 +1,17 @@
 package usuario;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Scanner;
+import loja.Loja;
 
-public abstract class User implements Serializable {
+
+public class User implements Serializable {
     private String Nome;
     private String CPF;
     private String CEP;
     private String NumeroCep;
+    private static final long serialVersionUID = 1001L;
 
     public User(String nome, String cpf, String cep, String numeroCep) {
         this.Nome = nome;
@@ -15,7 +20,25 @@ public abstract class User implements Serializable {
         this.NumeroCep = numeroCep;
     }
 
-    public abstract void verPerfil(int index);
+
+    private transient Scanner scan = new Scanner(System.in);
+
+    public User cadastrar(User user, ArrayList<Loja> array){
+        
+        System.out.print("\nCadatro:\nNome: ");
+        user.setNome(scan.nextLine());
+        
+        System.out.print("CPF:");
+        user.setCPF(scan.next());
+        
+        System.out.print("CEP:");
+        user.setCEP(scan.next());
+        
+        System.out.print("Numero do endereço: ");
+        user.setNumeroCep(scan.next());
+        scan.nextLine();
+        return user;
+    }
 
     public String getNome() {
         return this.Nome;

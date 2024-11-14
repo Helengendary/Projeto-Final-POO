@@ -10,11 +10,6 @@ public class Cliente extends User {
         super(nome, cpf, cep, numero);
     }
 
-    @Override
-    public void verPerfil(int index) {
-        System.out.println(index + " - " + this.getNome());
-    }
-
     public void AdicionarCarrinho(Produto prod) {
         if (prod.getQuantidade() > 0) {
             this.Carrinho.add(prod);
