@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import loja.Loja;
 import loja.Produto;
+import pagamento.Boleto;
+import pagamento.Cartao;
+import pagamento.Pix;
 import usuario.Cliente;
 import usuario.Dono;
 import usuario.User;
@@ -23,6 +26,7 @@ public class Main {
             ArrayList<Loja> lojas = new ArrayList<>();
             ArrayList<Produto> produtos = new ArrayList<>();
 
+            Boolean repete = false;
             String senhaInserida = "";
             boolean dentro = true;
             String locate = "1";
@@ -123,7 +127,7 @@ public class Main {
                         System.out.println("Insira sua senha: ");
                         senhaInserida = scan.nextLine();
                         
-                        if (senhaInserida.equals(donos.get(indexDonoAtual))) {
+                        if (senhaInserida.equals(donos.get(indexDonoAtual).getSenha())) {
                             atualDono = donos.get(indexDonoAtual);
                             System.out.println("Entrado como " + atualDono.getNome());
                             locate = "11";
@@ -145,13 +149,28 @@ public class Main {
                         User dono = new Dono(null, null, null, null, null, null);
 
                         atualDono = dono.cadastrar(dono, lojas);
-                        System.out.println("Cadastrado e entrado como " + atualDono.getNome());
 
                         donos = Serializacao.carregarDono();
-                        donos.add(atualDono);
-                        Serializacao.salvarDono(donos);
 
-                        locate = "11";
+                        repete = false;
+
+                        for (User donoNome : donos) {
+                            if(atualDono.getNome().equals(donoNome.getNome())) {
+                                repete = true;
+                            }
+                        }
+
+                        if (repete) {
+                            System.out.println("ESSE NOME JÁ EXISTE!");
+                        } else {
+                            System.out.println("Cadastrado e entrado como " + atualDono.getNome());
+    
+                            donos.add(atualDono);
+                            Serializacao.salvarDono(donos);
+                            locate = "11";
+                        }
+
+
                         break;
                     
                     case "7":
@@ -175,8 +194,8 @@ public class Main {
                         System.out.println("Insira sua senha: ");
                         senhaInserida = scan.nextLine();
                         
-                        if (senhaInserida.equals(donos.get(indexDonoAtual))) {
-                            atualCliente = donos.get(indexClienteAtual);
+                        if (senhaInserida.equals(clientes.get(indexClienteAtual).getSenha())) {
+                            atualCliente = clientes.get(indexClienteAtual);
                             System.out.println("Entrado como " + atualCliente.getNome());
                             locate = "15";
                         } else {
@@ -184,16 +203,35 @@ public class Main {
                             locate = "3";
                         }   
 
-                        atualCliente = clientes.get(indexClienteAtual);
-                        System.out.println("Entrado como " + atualCliente.getNome());
-
-                        locate = "15";
                         break;
 
                     case "8":
                         Cliente newcli = new Cliente(null, null, null, null, null);
 
                         atualCliente = newcli.cadastrar(newcli, lojas);
+
+                        repete = false;
+
+                        clientes = Serializacao.carregarCliente();
+
+                        for (User CliNome : clientes) {
+                            if(atualCliente.getNome().equals(CliNome.getNome())) {
+                                repete = true;
+                            }
+                        }
+
+                        if (repete) {
+                            System.out.println("ESSE NOME JÁ EXISTE!");
+                        } else {
+                            System.out.println("Cadastrado e entrado como " + atualCliente.getNome());
+    
+                            clientes.add(atualCliente);
+                            Serializacao.salvarCliente(clientes);
+                            System.out.println("Cadastrado e entrado como " + atualCliente.getNome());
+                            
+                            locate = "15";
+                        }
+
 
                         clientes = Serializacao.carregarCliente();
                         clientes.add(atualCliente);
@@ -355,7 +393,7 @@ public class Main {
                         clientes = Serializacao.carregarCliente();
 
                         for (int i = 0; i < clientes.size(); i++) {
-                            if (clientes.get(i).equals(atualCliente)) {
+                            if (clientes.get(i).getNome().equals(atualCliente.getNome())) {
                                 clientes.set(i, clienteCatalogo);
                                 System.err.println("\natualizou o cliente");
                             }
@@ -382,8 +420,65 @@ public class Main {
                             break;
                         }
 
+                        locate = beforeLocate;
+                        break;
+                    case "18":
+                        System.out.println("\nSELECIONE O MÉTODO DE PAGAMENTO\n1 - Cartão\n2 - Boleto\n3 - Pix\n");
+                        int metodoPag = scan.nextInt();
+                        scan.nextLine();
+
+                        switch (metodoPag) {
+                            case 1:
+                                Cliente clientePagar = (Cliente) atualCliente;
+                                
+                                System.out.println("Número do cartão: ");
+                                String numCad = scan.nextLine();
+                                
+                                System.out.println("Validade: ");
+                                String vali = scan.nextLine();
+                                
+                                System.out.println("CVV: ");
+                                String cvv = scan.nextLine();
+
+                                double total = 0;
+                                for (Produto prod : clientePagar.getCarrinho()) {
+                                    total += prod.getPreco();
+                                }
+
+                                Cartao cartao = new Cartao(total, numCad, vali, cvv);
+
+                                cartao.processarPagamento(cartao.autorizarPagamento(senhaInserida, clientePagar), clientePagar);
+                                break;
+                            case 2:
+                                Cliente clienteBoleto = (Cliente) atualCliente;
+
+                                double totalBoleto = 0;
+                                for (Produto prod : clienteBoleto.getCarrinho()) {
+                                    totalBoleto += prod.getPreco();
+                                }
+
+                                Boleto boleto = new Boleto(totalBoleto);
+
+                                boleto.processarPagamento(boleto.autorizarPagamento(senhaInserida, clienteBoleto), clienteBoleto);
+
+                                break;
+                            case 3:
+                                Cliente clientePix = (Cliente) atualCliente;
+
+                                double totalPix = 0;
+                                for (Produto prod : clientePix.getCarrinho()) {
+                                    totalPix += prod.getPreco();
+                                }
+
+                                Pix pix = new Pix(totalPix);
+
+                                pix.processarPagamento(pix.autorizarPagamento(senhaInserida, clientePix), clientePix);
+
+                                break;
+                            default:
+                                throw new AssertionError();
+                            }
                         locate = "15";
-                        // locate = beforeLocate;
                         break;
                     default:
                         System.out.println("Ta no default");
