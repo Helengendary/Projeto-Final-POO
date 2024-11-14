@@ -15,17 +15,17 @@ public class Boleto extends PagamentoBase {
     @Override
     public String gerarCodigo() {
         String ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        int TAMANHO_CHAVE_PIX = 32;
+        int TAMANHO_CODIGO_PIX = 6;
         SecureRandom random = new SecureRandom();
         
-        StringBuilder chavePix = new StringBuilder(TAMANHO_CHAVE_PIX);
+        StringBuilder codigoPix = new StringBuilder(TAMANHO_CODIGO_PIX);
         
-        for (int i = 0; i < TAMANHO_CHAVE_PIX; i++) {
+        for (int i = 0; i < TAMANHO_CODIGO_PIX; i++) {
             int index = random.nextInt(ALFABETO.length());
-            chavePix.append(ALFABETO.charAt(index));
+            codigoPix.append(ALFABETO.charAt(index));
         }
         
-        return chavePix.toString();
+        return codigoPix.toString();
     }
 
     @Override
