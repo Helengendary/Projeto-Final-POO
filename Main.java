@@ -23,6 +23,7 @@ public class Main {
             ArrayList<Loja> lojas = new ArrayList<>();
             ArrayList<Produto> produtos = new ArrayList<>();
 
+            String senhaInserida = "";
             boolean dentro = true;
             String locate = "1";
             String beforeLocate = "";
@@ -119,10 +120,17 @@ public class Main {
                         indexDonoAtual = scan.nextInt();
                         scan.nextLine();
 
-                        atualDono = donos.get(indexDonoAtual);
-                        System.out.println("Entrado como " + atualDono.getNome());
+                        System.out.println("Insira sua senha: ");
+                        senhaInserida = scan.nextLine();
                         
-                        locate = "11";
+                        if (senhaInserida.equals(donos.get(indexDonoAtual))) {
+                            atualDono = donos.get(indexDonoAtual);
+                            System.out.println("Entrado como " + atualDono.getNome());
+                            locate = "11";
+                        } else {
+                            System.out.println("Senha incorreta!");
+                            locate = "2";
+                        }   
                         break;
                         
                     case "6":
@@ -163,6 +171,18 @@ public class Main {
 
                         indexClienteAtual = scan.nextInt();
                         scan.nextLine();
+
+                        System.out.println("Insira sua senha: ");
+                        senhaInserida = scan.nextLine();
+                        
+                        if (senhaInserida.equals(donos.get(indexDonoAtual))) {
+                            atualCliente = donos.get(indexClienteAtual);
+                            System.out.println("Entrado como " + atualCliente.getNome());
+                            locate = "15";
+                        } else {
+                            System.out.println("Senha incorreta!");
+                            locate = "3";
+                        }   
 
                         atualCliente = clientes.get(indexClienteAtual);
                         System.out.println("Entrado como " + atualCliente.getNome());
